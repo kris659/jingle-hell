@@ -31,7 +31,7 @@ public class ItemPickup : MonoBehaviour
         if (isChargingThrow && Input.GetMouseButtonUp(0))
             ThrowItem();
         if (isChargingThrow)
-            UIManager.chargingUI.UpdateImage((Time.time - chargingStartTime) / maxChargingTime);
+            UIManager.chargingUI.UpdateUI((Time.time - chargingStartTime) / maxChargingTime);
     }
 
     private void TryToPickUp()
@@ -57,6 +57,8 @@ public class ItemPickup : MonoBehaviour
 
     private void ThrowItem()
     {
+        UIManager.chargingUI.HideUI();
+
         isChargingThrow = false;
         isHoldingItem = false;
         Item itemScript = heldItem.GetComponent<Item>();

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ChargingUI : MonoBehaviour
+public class HealthUI : MonoBehaviour
 {
     [SerializeField] private Image image;
     private bool isUIHidden;
@@ -15,7 +15,7 @@ public class ChargingUI : MonoBehaviour
 
     public void UpdateUI(float fillAmount)
     {
-        if(isUIHidden)
+        if (isUIHidden)
             ShowUI();
         image.fillAmount = fillAmount;
     }

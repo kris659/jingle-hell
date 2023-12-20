@@ -12,6 +12,7 @@ public class Catapult : MonoBehaviour
 
     [SerializeField] public float shootForce;
     [SerializeField] public float shootDuration;
+    [SerializeField] private float randomRotationMult;
 
     private Animator animator;
     private bool isShooting = false;
@@ -47,12 +48,17 @@ public class Catapult : MonoBehaviour
         cube.transform.position = spawnPoint.position + cube.transform.localScale.y * 0.5f * spawnPoint.up;
         cube.transform.parent = spawnPoint;
         yield return new WaitForSeconds(shootDuration * 0.85f);
+
+        BoxCollider collider = cube.GetComponent<BoxCollider>();
+        Rigidbody rb = cube.AddComponent<Rigidbody>();
+
         cube.transform.parent = null;
-        cube.GetComponent<BoxCollider>().size = new Vector3(1, 0.5f, 1);
-        cube.AddComponent<Rigidbody>().AddForce((spawnPoint.up - spawnPoint.right * 0.2f) * shootForce, ForceMode.Impulse);
+        collider.size = new Vector3(1, 0.5f, 1);
+        rb.AddForce((spawnPoint.up - spawnPoint.right * 0.2f) * shootForce, ForceMode.Impulse);
+        rb.AddTorque(new Vector3(Random.Range(0, 1.0f), Random.Range(0, 1.0f), Random.Range(0, 1.0f)) * randomRotationMult ,ForceMode.Impulse);
+
         yield return new WaitForSeconds(shootDuration * 0.15f);
         cube.GetComponent<BoxCollider>().size = new Vector3(1, 1, 1);
-        cube.transform.parent = null;
     }
 
 }
