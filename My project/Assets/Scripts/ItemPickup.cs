@@ -17,7 +17,7 @@ public class ItemPickup : MonoBehaviour
     private bool isHoldingItem = false;
     private bool isChargingThrow = false;
     private float chargingStartTime = 0;
-    private GameObject holdedItem;
+    private GameObject heldItem;
 
     void Update()
     {
@@ -30,6 +30,8 @@ public class ItemPickup : MonoBehaviour
                 TryToPickUp();
         if (isChargingThrow && Input.GetMouseButtonUp(0))
             ThrowItem();
+        if (isChargingThrow)
+            UIManager.chargingUI.UpdateUI((Time.time - chargingStartTime) / maxChargingTime);
     }
 
     private void TryToPickUp()
@@ -43,26 +45,28 @@ public class ItemPickup : MonoBehaviour
             Debug.Log(hit.transform.name);
             if (hit.transform.TryGetComponent(out Item itemScript)){
                 isHoldingItem = true;
-                holdedItem = hit.transform.gameObject;
-                holdedItem.transform.parent = playerCamera.transform;
-                holdedItem.transform.localPosition = itemScript.holdingOffset;
-                holdedItem.transform.localScale = itemScript.holdingScale;
-                holdedItem.GetComponent<Collider>().enabled = false;
-                Destroy(holdedItem.GetComponent<Rigidbody>());                
+                heldItem = hit.transform.gameObject;
+                heldItem.transform.parent = playerCamera.transform;
+                heldItem.transform.localPosition = itemScript.holdingOffset;
+                heldItem.transform.localScale = itemScript.holdingScale;
+                heldItem.GetComponent<Collider>().enabled = false;
+                Destroy(heldItem.GetComponent<Rigidbody>());                
             }
         }
     }
 
     private void ThrowItem()
     {
+        UIManager.chargingUI.HideUI();
+
         isChargingThrow = false;
         isHoldingItem = false;
-        Item itemScript = holdedItem.GetComponent<Item>();
-        holdedItem.transform.parent = null;
-        holdedItem.transform.position += playerCamera.transform.forward * 0.2f;
-        holdedItem.transform.localScale = itemScript.normalScale;
-        holdedItem.GetComponent<Collider>().enabled = true;
-        Rigidbody rb = holdedItem.AddComponent<Rigidbody>();
+        Item itemScript = heldItem.GetComponent<Item>();
+        heldItem.transform.parent = null;
+        heldItem.transform.position += playerCamera.transform.forward * 0.2f;
+        heldItem.transform.localScale = itemScript.normalScale;
+        heldItem.GetComponent<Collider>().enabled = true;
+        Rigidbody rb = heldItem.AddComponent<Rigidbody>();
         rb.mass = itemScript.weight;
 
         rb.AddForce(GetThrowForce(), ForceMode.Impulse);
