@@ -7,13 +7,17 @@ public class UIManager : MonoBehaviour
     public static ChargingUI chargingUI;
     [SerializeField] private ChargingUI _chargingUI;
 
-    public static HealthUI healthUI;
-    [SerializeField] private HealthUI _healthUI;
+    public static PlayerHealthUI playerHealthUI;
+    [SerializeField] private PlayerHealthUI _playerHealthUI;
+
+    public static SantaHealthUI santaHealthUI;
+    [SerializeField] private SantaHealthUI _santaHealthUI;
 
 
     private void Start()
     {
         chargingUI = _chargingUI;
-        healthUI = _healthUI;
+        playerHealthUI = _playerHealthUI;
+        santaHealthUI = _santaHealthUI;
     }
 }

@@ -7,6 +7,8 @@ public class Item : MonoBehaviour
     [HideInInspector]
     public float weight;
 
+    public float damageMult;
+
     public Vector3 holdingOffset;
 
     [HideInInspector]
@@ -17,5 +19,12 @@ public class Item : MonoBehaviour
     {
         normalScale = transform.localScale;
         weight = GetComponent<Rigidbody>().mass;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.TryGetComponent(out ITakingDamage target)){            
+            target.TakeDamage(collision.impulse.magnitude * damageMult);
+        }
     }
 }

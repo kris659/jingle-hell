@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthUI : MonoBehaviour
+public class SantaHealthUI : MonoBehaviour
 {
     [SerializeField] private Image image;
     private bool isUIHidden;

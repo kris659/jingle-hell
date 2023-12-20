@@ -46,6 +46,7 @@ public class ItemPickup : MonoBehaviour
             if (hit.transform.TryGetComponent(out Item itemScript)){
                 isHoldingItem = true;
                 heldItem = hit.transform.gameObject;
+                //heldItem.transform.localEulerAngles = Vector3.zero;
                 heldItem.transform.parent = playerCamera.transform;
                 heldItem.transform.localPosition = itemScript.holdingOffset;
                 heldItem.transform.localScale = itemScript.holdingScale;
