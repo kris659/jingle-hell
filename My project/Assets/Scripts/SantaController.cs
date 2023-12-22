@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class SantaController : MonoBehaviour, ITakingDamage
 {
@@ -22,12 +23,21 @@ public class SantaController : MonoBehaviour, ITakingDamage
     [SerializeField] private Vector3 minPresentSpawnPosition;
     [SerializeField] private Vector3 maxPresentSpawnPosition;
 
-    
+    private NavMeshAgent navMeshAgent;
 
     private void Awake()
     {
         health = maxHealth;
         StartCoroutine(AttackCoroutine());
+        navMeshAgent = GetComponent<NavMeshAgent>();
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            navMeshAgent.SetDestination(player.transform.position);
+        }
     }
 
     public void TakeDamage(float damage)
@@ -74,14 +84,18 @@ public class SantaController : MonoBehaviour, ITakingDamage
     }
     IEnumerator ThrowPresent()
     {        
-        GameObject present = Instantiate(presentPrefab, transform);
-        present.transform.position = GetPresentSpawnPosition();
+        GameObject present = Instantiate(bigPresentPrefab, transform);
+        present.transform.position = bigPresentSpawnPoint.position;
         Rigidbody rb = present.GetComponent<Rigidbody>();
         rb.useGravity = false;
         
         yield return new WaitForSeconds(1);
         rb.useGravity = false;
         present.transform.parent = null;
+        Vector3 forceDirection = player.transform.position - present.transform.position;
+        float power = throwingForce;
+        rb.AddForce(forceDirection * power, ForceMode.Impulse);
+        Destroy(present, 3);
     }
 
     Vector3 GetPresentSpawnPosition()
