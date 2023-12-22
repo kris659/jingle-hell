@@ -6,7 +6,6 @@ using UnityEngine;
 public class SantaController : MonoBehaviour, ITakingDamage
 {
     [SerializeField] private GameObject player;
-
     [SerializeField] private int maxHealth;
     [SerializeField] private float health;
 
@@ -15,8 +14,15 @@ public class SantaController : MonoBehaviour, ITakingDamage
 
 
     [SerializeField] private GameObject presentPrefab;
+    [SerializeField] private GameObject bigPresentPrefab;
+    [SerializeField] private Transform bigPresentSpawnPoint;
+
+    [SerializeField] private float throwingForce;
+
     [SerializeField] private Vector3 minPresentSpawnPosition;
     [SerializeField] private Vector3 maxPresentSpawnPosition;
+
+    
 
     private void Awake()
     {
@@ -41,8 +47,10 @@ public class SantaController : MonoBehaviour, ITakingDamage
 
     IEnumerator AttackCoroutine()
     {
+        //yield return new WaitForSeconds(attacksCooldown / santaAttackSpeedMultByHP.Evaluate(health / maxHealth));
+        //StartCoroutine(SpawnExplosivePresents());
         yield return new WaitForSeconds(attacksCooldown / santaAttackSpeedMultByHP.Evaluate(health / maxHealth));
-        StartCoroutine(SpawnExplosivePresents());
+        StartCoroutine(ThrowPresent());
         StartCoroutine(AttackCoroutine());
     }
 
@@ -63,6 +71,17 @@ public class SantaController : MonoBehaviour, ITakingDamage
                 continue;
             presents[i].useGravity = true;
         }
+    }
+    IEnumerator ThrowPresent()
+    {        
+        GameObject present = Instantiate(presentPrefab, transform);
+        present.transform.position = GetPresentSpawnPosition();
+        Rigidbody rb = present.GetComponent<Rigidbody>();
+        rb.useGravity = false;
+        
+        yield return new WaitForSeconds(1);
+        rb.useGravity = false;
+        present.transform.parent = null;
     }
 
     Vector3 GetPresentSpawnPosition()
