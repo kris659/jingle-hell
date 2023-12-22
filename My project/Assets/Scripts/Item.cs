@@ -15,10 +15,12 @@ public class Item : MonoBehaviour
     public Vector3 normalScale;
     public Vector3 holdingScale;
 
+    public delegate void OnPickup(Item item);
+    public OnPickup onPickup;
+
     private void Start()
     {
-        normalScale = transform.localScale;
-        weight = GetComponent<Rigidbody>().mass;
+        onPickup += Init;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -26,5 +28,14 @@ public class Item : MonoBehaviour
         if(collision.gameObject.TryGetComponent(out ITakingDamage target)){            
             target.TakeDamage(collision.impulse.magnitude * damageMult);
         }
+    }
+    
+    void Init(Item item)
+    {
+        if(TryGetComponent(out Rigidbody rb)){
+            Destroy(rb);
+        }
+        normalScale = transform.localScale;
+        //weight = GetComponent<Rigidbody>().mass;
     }
 }

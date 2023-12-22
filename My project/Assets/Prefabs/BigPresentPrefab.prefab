@@ -147,5 +147,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionPower: 10
-  explosionDamageMult: 20
+  explosionDamageMult: 10
   explosionRadius: 3
+  particlesPrefab: {fileID: 8792840101825986214, guid: 6950f10698710ae479fe4a281171176f,
+    type: 3}
+  eplosionParticlesSize: 0.3

@@ -43,7 +43,7 @@ public class ItemPickup : MonoBehaviour
         if (Physics.Raycast(origin, direction, out hit, pickupRange, pickupLayer))
         {
             Debug.Log(hit.transform.name);
-            if (hit.transform.TryGetComponent(out Item itemScript)){
+            if (hit.transform.TryGetComponent(out Item itemScript)){                
                 isHoldingItem = true;
                 heldItem = hit.transform.gameObject;
                 //heldItem.transform.localEulerAngles = Vector3.zero;
@@ -51,7 +51,8 @@ public class ItemPickup : MonoBehaviour
                 heldItem.transform.localPosition = itemScript.holdingOffset;
                 heldItem.transform.localScale = itemScript.holdingScale;
                 heldItem.GetComponent<Collider>().enabled = false;
-                Destroy(heldItem.GetComponent<Rigidbody>());                
+                itemScript.onPickup?.Invoke(itemScript);
+                itemScript.onPickup = null;
             }
         }
     }

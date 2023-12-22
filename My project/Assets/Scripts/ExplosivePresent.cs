@@ -7,11 +7,12 @@ public class ExplosivePresent : MonoBehaviour
     [SerializeField] private float explosionPower;
     [SerializeField] private float explosionDamageMult;
     [SerializeField] private float explosionRadius;
+    [SerializeField] private GameObject particlesPrefab;
+    [SerializeField] private float eplosionParticlesSize;
 
     private void Explode()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
-        Debug.Log(colliders.Length);
         for(int i = 0; i < colliders.Length; i++){
             if (colliders[i].gameObject.TryGetComponent(out PlayerHealth playerHealth))
                 playerHealth.TakeDamage(explosionDamageMult * (explosionRadius - Vector3.Distance(transform.position, playerHealth.transform.position)));
@@ -26,6 +27,10 @@ public class ExplosivePresent : MonoBehaviour
             }
                 
         }
+        GameObject particles = Instantiate(particlesPrefab);
+        particles.transform.position = transform.position;
+        particles.transform.localScale = Vector3.one * eplosionParticlesSize;
+        Destroy(particles, 3);
         Destroy(gameObject);
     }
 

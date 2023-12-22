@@ -15,6 +15,10 @@ public class PlayerHealthUI : MonoBehaviour
 
     public void UpdateUI(float fillAmount)
     {
+        if(fillAmount < 0)
+            fillAmount = 0;
+        if(fillAmount > 1)
+            fillAmount = 1;
         if (isUIHidden)
             ShowUI();
         image.fillAmount = fillAmount;
