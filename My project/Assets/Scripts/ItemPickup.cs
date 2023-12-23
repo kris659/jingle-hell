@@ -53,6 +53,8 @@ public class ItemPickup : MonoBehaviour
                 heldItem.GetComponent<Collider>().enabled = false;
                 itemScript.onPickup?.Invoke(itemScript);
                 itemScript.onPickup = null;
+                if(itemScript.TryGetComponent(out Rigidbody rb))
+                    Destroy(rb);
             }
         }
     }
@@ -70,6 +72,7 @@ public class ItemPickup : MonoBehaviour
         heldItem.GetComponent<Collider>().enabled = true;
         Rigidbody rb = heldItem.AddComponent<Rigidbody>();
         rb.mass = itemScript.weight;
+        Debug.Log("Mass: " + rb.mass);
 
         rb.AddForce(GetThrowForce(), ForceMode.Impulse);
     }

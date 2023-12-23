@@ -9,7 +9,6 @@ public class ExplosivePresent : MonoBehaviour
     [SerializeField] private float explosionRadius;
     [SerializeField] private GameObject particlesPrefab;
     [SerializeField] private float eplosionParticlesSize;
-
     private void Explode()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
@@ -25,7 +24,6 @@ public class ExplosivePresent : MonoBehaviour
                     forceDirection.x *= 5;
                 rb.AddForce(forceDirection  * power, ForceMode.Impulse);
             }
-                
         }
         GameObject particles = Instantiate(particlesPrefab);
         particles.transform.position = transform.position;
@@ -36,7 +34,8 @@ public class ExplosivePresent : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Explode();
+        if(collision.gameObject.tag != "Santa")
+            Explode();
     }
 
     private void OnDrawGizmosSelected()

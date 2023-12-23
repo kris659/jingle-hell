@@ -152,3 +152,6 @@ MonoBehaviour:
   particlesPrefab: {fileID: 8792840101825986214, guid: 6950f10698710ae479fe4a281171176f,
     type: 3}
   eplosionParticlesSize: 0.3
+  ignoreLayer:
+    serializedVersion: 2
+    m_Bits: 256

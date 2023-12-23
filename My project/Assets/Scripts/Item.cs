@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
-    [HideInInspector]
-    public float weight;
+    public float weight = 1;
 
     public float damageMult;
 
@@ -34,6 +33,7 @@ public class Item : MonoBehaviour
     {
         if(TryGetComponent(out Rigidbody rb)){
             Destroy(rb);
+            weight = GetComponent<Rigidbody>().mass;
         }
         normalScale = transform.localScale;
         //weight = GetComponent<Rigidbody>().mass;
