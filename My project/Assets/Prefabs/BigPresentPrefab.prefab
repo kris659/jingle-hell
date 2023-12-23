@@ -146,12 +146,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 640c24ed0d09eac47adf6af157d77198, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosionPower: 10
+  explosionPower: 2.5
   explosionDamageMult: 10
-  explosionRadius: 3
+  explosionRadius: 5
   particlesPrefab: {fileID: 8792840101825986214, guid: 6950f10698710ae479fe4a281171176f,
     type: 3}
   eplosionParticlesSize: 0.3
-  ignoreLayer:
-    serializedVersion: 2
-    m_Bits: 256

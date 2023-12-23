@@ -26,7 +26,7 @@ public class ExplosivePresent : MonoBehaviour
             }
         }
         GameObject particles = Instantiate(particlesPrefab);
-        particles.transform.position = transform.position;
+        particles.transform.position = transform.position + Vector3.up * 0.2f;
         particles.transform.localScale = Vector3.one * eplosionParticlesSize;
         Destroy(particles, 3);
         Destroy(gameObject);

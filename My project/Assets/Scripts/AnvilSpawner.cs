@@ -19,7 +19,8 @@ public class AnvilSpawner : MonoBehaviour
     }
     IEnumerator SpawnCoroutine()
     {
-        if(anvils.Count == 0 || spawnPoint.position.z < anvils[0].transform.position.z + minDistanceBetween){
+        yield return new WaitForSeconds(Random.Range(0, 0.1f));
+        if (anvils.Count == 0 || spawnPoint.position.z < anvils[0].transform.position.z + minDistanceBetween){
             GameObject anvil = Instantiate(prefab);
             anvil.GetComponent<Item>().onPickup += AnvilPickedUp;
 
@@ -33,6 +34,9 @@ public class AnvilSpawner : MonoBehaviour
 
     private void Update()
     {
+        if(Input.GetKeyDown(KeyCode.E))
+            Debug.Log(anvils.Count);
+
         for(int i = 0; i < anvils.Count; i++){
             if (anvils[i] == null)
             {
@@ -40,15 +44,19 @@ public class AnvilSpawner : MonoBehaviour
                 continue;
             }
             Vector3 nextPosition = maxPosition.position;
-            if (i > 0)
-                nextPosition = anvils[i - 1].transform.position;
             if(anvils[i].transform.position.z + minDistanceBetween < nextPosition.z)
                 anvils[i].transform.position -= conveyorSpeed * Time.deltaTime * transform.right;
+            else
+            {
+                Destroy(anvils[i]);
+                anvils.RemoveAt(i);
+            }
         }
     }
 
     void AnvilPickedUp(Item item)
     {
+        item.GetComponent<BoxCollider>().isTrigger = false;
         anvils.Remove(item.gameObject);
     }
 }

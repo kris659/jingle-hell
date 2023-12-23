@@ -26,9 +26,11 @@ public class SantaController : MonoBehaviour, ITakingDamage
 
 
     [SerializeField] private float santaDistance;
+    [SerializeField] private float stompRadius;
+    [SerializeField] private float stompPower;
+    [SerializeField] private float stompDamageMult;
     [SerializeField] private int santaAttackChance;
-
-
+    [SerializeField] private GameObject dustParticlesPrefab;
     private NavMeshAgent navMeshAgent;
 
     [SerializeField] private Animator animator;
@@ -112,7 +114,33 @@ public class SantaController : MonoBehaviour, ITakingDamage
     {
         stomping = true;
         animator.SetBool("stomping", stomping);
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.45f);
+        Destroy(Instantiate(dustParticlesPrefab, transform), 1f);
+
+        Collider[] colliders = Physics.OverlapSphere(transform.position, stompRadius);
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            if (colliders[i].gameObject.TryGetComponent(out PlayerHealth playerHealth))
+                playerHealth.TakeDamage(stompDamageMult * (stompRadius - Vector3.Distance(transform.position, playerHealth.transform.position)));
+        }
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            if (colliders[i].gameObject.TryGetComponent(out Rigidbody rb))
+            {
+                Vector3 forceDirection = rb.transform.position - transform.position;
+                //float power = stompRadius * (stompRadius - Vector3.Distance(transform.position, rb.transform.position));
+                //if (rb.GetComponent<PlayerHealth>() != null)
+                //    forceDirection.x *= 5;
+                //rb.AddForce(forceDirection * power, ForceMode.Impulse);
+                if(rb.GetComponent<PlayerHealth>() != null)
+                    rb.AddExplosionForce(stompPower * 40, transform.position, stompRadius);
+                else
+                    rb.AddExplosionForce(stompPower, transform.position, stompRadius);
+            }
+        }
+
+
+        yield return new WaitForSeconds(0.55f);
         stomping = false;
         animator.SetBool("stomping", stomping);
     }
@@ -147,7 +175,7 @@ public class SantaController : MonoBehaviour, ITakingDamage
                 continue;
             Collider collider = presents[i].GetComponent<Collider>();
             collider.enabled = true;
-            presents[i].AddComponent<Rigidbody>();//.useGravity = true;
+            presents[i].AddComponent<Rigidbody>();
         }
         smallPresents = false;
         animator.SetBool("smallPresents", smallPresents);
@@ -170,7 +198,7 @@ public class SantaController : MonoBehaviour, ITakingDamage
             Vector3 forceDirection = (player.transform.position - present.transform.position).normalized;
             float power = throwingForce;
             rb.AddForce(forceDirection * power, ForceMode.Impulse);
-            Destroy(present, 3);
+            Destroy(present, 5);
         }
         yield return new WaitForSeconds(1f);
         bigPresent = false;
@@ -184,5 +212,9 @@ public class SantaController : MonoBehaviour, ITakingDamage
             Random.Range(minPresentSpawnPosition.position.y, maxPresentSpawnPosition.position.y),
             Random.Range(minPresentSpawnPosition.position.z, maxPresentSpawnPosition.position.z));
         return position;
-    }    
+    }
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(transform.position + Vector3.up, stompRadius);
+    }
 }
