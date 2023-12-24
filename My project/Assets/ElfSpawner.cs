@@ -14,7 +14,7 @@ public class ElfSpawner : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(Spawn());
+        BossEnter.OnBossEnter += StartSpawn;
     }
 
     IEnumerator Spawn()
@@ -24,6 +24,11 @@ public class ElfSpawner : MonoBehaviour
         elf.GetComponent<NavMeshAgent>().enabled = false;
         elf.GetComponent<ElfController>().Init(startPoint.position, player);
         yield return new WaitForSeconds(Random.Range(cooldown, cooldown * 2));
+        StartCoroutine(Spawn());
+    }
+
+    void StartSpawn()
+    {
         StartCoroutine(Spawn());
     }
 }

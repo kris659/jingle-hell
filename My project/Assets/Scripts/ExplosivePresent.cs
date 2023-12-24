@@ -28,6 +28,18 @@ public class ExplosivePresent : MonoBehaviour
         GameObject particles = Instantiate(particlesPrefab);
         particles.transform.position = transform.position + Vector3.up * 0.2f;
         particles.transform.localScale = Vector3.one * eplosionParticlesSize;
+
+        int index = Random.Range(0, 4);
+        if (index == 0)
+            AudioManager.PlaySound(AudioManager.Sound.PresentExplosion1);
+        if (index == 1)
+            AudioManager.PlaySound(AudioManager.Sound.PresentExplosion2);
+        if (index == 2)
+            AudioManager.PlaySound(AudioManager.Sound.PresentExplosion3);
+        if (index == 3)
+            AudioManager.PlaySound(AudioManager.Sound.PresentExplosion4);
+
+
         Destroy(particles, 3);
         Destroy(gameObject);
     }

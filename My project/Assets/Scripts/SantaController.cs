@@ -40,6 +40,7 @@ public class SantaController : MonoBehaviour, ITakingDamage
     private bool bigPresent = false;
     private bool smallPresents = false;
 
+    private bool immortal = true;
     private void Awake()
     {
         health = maxHealth;
@@ -48,7 +49,10 @@ public class SantaController : MonoBehaviour, ITakingDamage
 
     private void Start()
     {
-        StartCoroutine(SelectAction());
+        BossEnter.OnBossEnter += () => { StartCoroutine(SelectAction());
+            UIManager.santaHealthUI.UpdateUI(health / maxHealth); 
+            immortal = false;
+        };
     }
 
     private void Update()
@@ -61,6 +65,17 @@ public class SantaController : MonoBehaviour, ITakingDamage
 
     public void TakeDamage(float damage)
     {
+        if (immortal)
+            return;
+        int index = Random.Range(0, 3);
+        if (index == 0)
+            AudioManager.PlaySound(AudioManager.Sound.SantaDamage1);
+        if (index == 1)
+            AudioManager.PlaySound(AudioManager.Sound.SantaDamage2);
+        if (index == 2)
+            AudioManager.PlaySound(AudioManager.Sound.SantaDamage3);
+
+
         health -= damage;
         health = Mathf.Max(health, 0);
         UIManager.santaHealthUI.UpdateUI(health / maxHealth);
@@ -71,6 +86,7 @@ public class SantaController : MonoBehaviour, ITakingDamage
     private void KilledSanta()
     {
         Debug.Log("KilledSanta");
+        UIManager.gameOverUI.OpenUI("Victory!");
         Destroy(gameObject);
     }
 
@@ -112,6 +128,7 @@ public class SantaController : MonoBehaviour, ITakingDamage
 
     IEnumerator Stomp()
     {
+        AudioManager.PlaySound(AudioManager.Sound.StompAttack);
         stomping = true;
         animator.SetBool("stomping", stomping);
         yield return new WaitForSeconds(1.45f);
@@ -146,6 +163,7 @@ public class SantaController : MonoBehaviour, ITakingDamage
     }
 
     IEnumerator SpawnExplosivePresents(){
+        AudioManager.PlaySound(AudioManager.Sound.SmallPresentsAttack);
         smallPresents = true;
         animator.SetBool("smallPresents", smallPresents);
 
@@ -182,6 +200,7 @@ public class SantaController : MonoBehaviour, ITakingDamage
     }
     IEnumerator ThrowPresent()
     {
+        AudioManager.PlaySound(AudioManager.Sound.BigPresentAttack);
         bigPresent = true;
         animator.SetBool("bigPresent", bigPresent);
         

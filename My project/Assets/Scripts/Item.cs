@@ -24,8 +24,11 @@ public class Item : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.TryGetComponent(out ITakingDamage target)){            
-            target.TakeDamage(collision.impulse.magnitude * damageMult);
+        if(collision.gameObject.TryGetComponent(out ITakingDamage target)){
+            if(collision.gameObject.GetComponent<PlayerHealth>() == null) {
+                AudioManager.PlaySound(AudioManager.Sound.AnvilHit);
+                target.TakeDamage(collision.impulse.magnitude * damageMult);
+            }            
         }
     }
     
@@ -36,6 +39,5 @@ public class Item : MonoBehaviour
             weight = GetComponent<Rigidbody>().mass;
         }
         normalScale = transform.localScale;
-        //weight = GetComponent<Rigidbody>().mass;
     }
 }

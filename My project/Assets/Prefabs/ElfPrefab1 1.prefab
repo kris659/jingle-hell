@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 1116610028601778516}
   m_Layer: 0
   m_Name: ElfPrefab1 1
-  m_TagString: Untagged
+  m_TagString: Santa
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -80,7 +80,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  maxHealth: 10
+  maxHealth: 1
   health: 0
   presentPrefab: {fileID: 3557246848237890029, guid: 512e8b0b60b9839499da2a7b35f8d237,
     type: 3}

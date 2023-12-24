@@ -18,13 +18,16 @@ public class ItemPickup : MonoBehaviour
     private bool isChargingThrow = false;
     private float chargingStartTime = 0;
     private GameObject heldItem;
+    public static bool tutorialPickup = false;
 
+    private GameObject throwingSound;
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
             if (isHoldingItem){
                 isChargingThrow = true;
                 chargingStartTime = Time.time;
+                throwingSound = AudioManager.PlaySound(AudioManager.Sound.AnvilThrowCharge);
             }
             else 
                 TryToPickUp();
@@ -43,7 +46,14 @@ public class ItemPickup : MonoBehaviour
         if (Physics.Raycast(origin, direction, out hit, pickupRange, pickupLayer))
         {
             Debug.Log(hit.transform.name);
-            if (hit.transform.TryGetComponent(out Item itemScript)){                
+            if (hit.transform.TryGetComponent(out Item itemScript)){
+                if (!tutorialPickup){
+                    UIManager.tutorialUI.UpdateText("Hit an elf with an anvil");
+                    tutorialPickup = true;
+                }
+
+                AudioManager.PlaySound(AudioManager.Sound.AnvilPickup);
+
                 isHoldingItem = true;
                 heldItem = hit.transform.gameObject;
                 //heldItem.transform.localEulerAngles = Vector3.zero;
@@ -61,6 +71,8 @@ public class ItemPickup : MonoBehaviour
 
     private void ThrowItem()
     {
+        Destroy(throwingSound);
+        AudioManager.PlaySound(AudioManager.Sound.AnvilThrow);
         UIManager.chargingUI.HideUI();
 
         isChargingThrow = false;

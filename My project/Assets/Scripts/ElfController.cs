@@ -53,8 +53,16 @@ public class ElfController : MonoBehaviour, ITakingDamage
 
     public void TakeDamage(float damage)
     {
-        health -= damage;
-        health = Mathf.Max(health, 0);
+        int index = Random.Range(0, 3);
+        if (index == 0)
+            AudioManager.PlaySound(AudioManager.Sound.ElfDamage1);
+        if (index == 1)
+            AudioManager.PlaySound(AudioManager.Sound.ElfDamage2);
+        if (index == 2)
+            AudioManager.PlaySound(AudioManager.Sound.ElfDamage3);
+        health = 0;
+        //health -= damage;
+        //health = Mathf.Max(health, 0);
         if (health == 0)
             KilledElf();
     }
@@ -96,6 +104,7 @@ public class ElfController : MonoBehaviour, ITakingDamage
     
     IEnumerator ThrowPresent()
     {
+        AudioManager.PlaySound(AudioManager.Sound.BigPresentAttack);
         smallPresent = true;
         animator.SetBool("smallPresent", smallPresent);
 

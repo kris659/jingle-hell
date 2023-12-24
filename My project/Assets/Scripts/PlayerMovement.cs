@@ -5,6 +5,7 @@ using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
+    private float maxVelocity = 10;
     [Header("Movement")]
     private float moveSpeed;
     public float walkSpeed;
@@ -86,6 +87,8 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         MovePlayer();
+        rb.velocity = new Vector3(Mathf.Min(rb.velocity.x, maxVelocity), Mathf.Min(rb.velocity.y, maxVelocity), Mathf.Min(rb.velocity.y, maxVelocity));
+        rb.velocity = new Vector3(Mathf.Max(rb.velocity.x, -maxVelocity), Mathf.Max(rb.velocity.y, -maxVelocity), Mathf.Max(rb.velocity.y, -maxVelocity));
     }
 
     private void MyInput()

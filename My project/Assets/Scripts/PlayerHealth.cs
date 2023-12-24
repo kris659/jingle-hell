@@ -16,7 +16,12 @@ public class PlayerHealth : MonoBehaviour, ITakingDamage
     {
         if (damage < 5)
             return;
-        
+        int index = Random.Range(0, 2);
+        if (index == 0)
+            AudioManager.PlaySound(AudioManager.Sound.PlayerDamage1);
+        if (index == 1)
+            AudioManager.PlaySound(AudioManager.Sound.PlayerDamage2);
+
         Debug.Log("Player damaged " +  damage);
         
         health -= damage;
@@ -29,5 +34,6 @@ public class PlayerHealth : MonoBehaviour, ITakingDamage
     void GameOver()
     {
         Debug.Log("GameOver");
+        UIManager.gameOverUI.OpenUI("You died");
     }
 }
