@@ -285,6 +285,9 @@ public class FirstPersonController : MonoBehaviour
                 if(!unlimitedSprint)
                 {
                     sprintRemaining -= 1 * Time.deltaTime;
+                    sprintRemaining = Mathf.Max(0, sprintRemaining);
+                    UIManager.sprintUI.UpdateUI(sprintRemaining / sprintDuration);
+
                     if (sprintRemaining <= 0)
                     {
                         isSprinting = false;
@@ -296,6 +299,9 @@ public class FirstPersonController : MonoBehaviour
             {
                 // Regain sprint while not sprinting
                 sprintRemaining = Mathf.Clamp(sprintRemaining += 1 * Time.deltaTime, 0, sprintDuration);
+                UIManager.sprintUI.UpdateUI(sprintRemaining / sprintDuration);
+                if (sprintRemaining == sprintDuration)
+                    UIManager.sprintUI.HideUI();
                 playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, fov, sprintFOVStepTime * Time.deltaTime);
             }
 
@@ -315,11 +321,11 @@ public class FirstPersonController : MonoBehaviour
             }
 
             // Handles sprintBar 
-            if(useSprintBar && !unlimitedSprint)
-            {
-                float sprintRemainingPercent = sprintRemaining / sprintDuration;
-                sprintBar.transform.localScale = new Vector3(sprintRemainingPercent, 1f, 1f);
-            }
+            //if(useSprintBar && !unlimitedSprint)
+            //{
+            //    float sprintRemainingPercent = sprintRemaining / sprintDuration;
+            //    sprintBar.transform.localScale = new Vector3(sprintRemainingPercent, 1f, 1f);
+            //}
         }
 
         #endregion
@@ -408,10 +414,10 @@ public class FirstPersonController : MonoBehaviour
                         Crouch();
                     }
 
-                    if (hideBarWhenFull && !unlimitedSprint)
-                    {
-                        sprintBarCG.alpha += 5 * Time.deltaTime;
-                    }
+                    //if (hideBarWhenFull && !unlimitedSprint)
+                    //{
+                    //    sprintBarCG.alpha += 5 * Time.deltaTime;
+                    //}
                 }
 
                 rb.AddForce(velocityChange, ForceMode.VelocityChange);

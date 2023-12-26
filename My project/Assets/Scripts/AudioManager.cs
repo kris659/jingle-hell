@@ -149,7 +149,6 @@ public class AudioManager : MonoBehaviour
     }
     static void UpdateMusicVolume()
     {
-        Debug.Log("A");
         if(isPlayingNormalMusic)
             mainMusicAudioSource.volume = _musicVolume * _normalMusicVolume * _masterVolume;
         else
