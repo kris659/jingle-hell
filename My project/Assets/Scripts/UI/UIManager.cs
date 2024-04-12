@@ -10,6 +10,9 @@ public class UIManager : MonoBehaviour
     public static PlayerHealthUI playerHealthUI;
     [SerializeField] private PlayerHealthUI _playerHealthUI;
 
+    public static PlayerHealthUI sprintUI;
+    [SerializeField] private PlayerHealthUI _sprintUI;
+
     public static SantaHealthUI santaHealthUI;
     [SerializeField] private SantaHealthUI _santaHealthUI;
 
@@ -31,5 +34,6 @@ public class UIManager : MonoBehaviour
         mainMenu = _mainMenu;
         gameOverUI = _gameOverUI;
         tutorialUI = _tutorialUI;
+        sprintUI = _sprintUI;
     }
 }

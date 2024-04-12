@@ -104,7 +104,7 @@ public class ElfController : MonoBehaviour, ITakingDamage
     
     IEnumerator ThrowPresent()
     {
-        AudioManager.PlaySound(AudioManager.Sound.BigPresentAttack);
+        AudioManager.PlaySound(AudioManager.Sound.ElfAttack);
         smallPresent = true;
         animator.SetBool("smallPresent", smallPresent);
 
